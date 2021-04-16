@@ -18,10 +18,16 @@ class InitMixin:
         seed = Seed.seeder()
         self.u1 = self.make_user("u1")
         self.u2 = self.make_user("u2")
-        seed.add_entity(Line, 10)
+        seed.add_entity(
+            Line, 10, {
+                'product_name': lambda x: seed.faker.random_element(FOOD_LIST),
+            })
         seed.add_entity(
             Order, 2, {'user': lambda x: User.objects.all().order_by("?")[0]})
         seed.execute()
+        for i in Order.objects.all():
+            lines = Line.objects.all().values_list('id', flat=True)
+            i.lines.add(*lines)
         self.seed = seed
 
 
@@ -58,3 +64,13 @@ class TestFlow(InitMixin, TestCase):
             data = {'user': self.u1.id, 'lines': [result.get("id")]}
             self.post("/api/orders/", data=data)
             self.response_201()
+
+    def test_aggregate(self):
+        from django.db import models as m
+        from .models import Row
+        s = (Row.objects.all().select_related("line")
+            .extra(select={'total':'core_line.price*core_line.quantity'})
+            .values("line__product_name", 'line__price', 'line__quantity','total')
+        )
+        print(s.query)
+        assert False, s[0]
