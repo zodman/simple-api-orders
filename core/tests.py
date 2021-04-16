@@ -36,7 +36,7 @@ class TestFlow(InitMixin, TestCase):
 
     def test_auth(self):
         resp = self.get("/api/orders/")
-        self.response_301(resp)
+        self.response_403(resp)
 
     def test_endpoint(self):
         with self.login(username="u1"):
