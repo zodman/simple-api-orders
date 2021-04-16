@@ -24,8 +24,6 @@ def test(c):
 def deploy(ctx):
     directory_app = "apps/newapp"
     app_name = "newapp"
-    local("yarn install", echo=True)
-    local("yarn run build", echo=True)
     local("python manage.py collectstatic --noinput", echo=True)
     local("find . -name '__pycache__' |xargs rm -rf ", echo=True)
     rsync(ctx, ".", directory_app, exclude=exclude_dirs)
