@@ -7,7 +7,6 @@ from .serializers import LineSerializer, OrderSerializer
 
 
 
-
 class LinesViewSet(viewsets.ModelViewSet):
     serializer_class = LineSerializer
     permission_classes = [IsAuthenticated]

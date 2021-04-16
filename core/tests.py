@@ -63,15 +63,23 @@ class TestFlow(InitMixin, TestCase):
                              extra={'format': 'json'})
             self.response_201(resp)
             result = resp.data
-            data = {'user': self.u1.id, 'lines': [result.get("id")]}
+            data = {'user': self.u1.id, 'lines': [result,]}
             self.post("/api/orders/", data=data)
             self.response_201()
+            id = self.last_response.data.get("id")
+            o = Order.objects.get(id=id)
+            self.assertTrue(o.lines.count() == 1, o.lines.count())
 
-    def test_aggregate(self):
+    def __test_aggregate(self):
         s = (Row.objects.all()
              # filters
             .select_related("line")
             .extra(select={'total':'core_line.price*core_line.quantity'})
-            .values("line__product_name", 'line__price', 'line__quantity','total')
+            .values("line__id", "line__product_name", 'line__price', 'line__quantity','total')
+            .order_by("-total")
         )
+        print(s.query)
         self.assertTrue('total' in s[0])
+        self.assertTrue(s[0].get("total") >= s[1].get("total"))
+        for i in s:
+            print(f'{i["line__product_name"]}  {i["total"]}')
