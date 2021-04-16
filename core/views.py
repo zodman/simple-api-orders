@@ -1,7 +1,11 @@
-from .serializers import LineSerializer, OrderSerializer
-from .models import Order, Line
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from django.db import models as m
+from .models import Row
+from .models import Order, Line
+from .serializers import LineSerializer, OrderSerializer
+
+
 
 
 class LinesViewSet(viewsets.ModelViewSet):
@@ -22,7 +26,16 @@ class OrdersViewSet(viewsets.ModelViewSet):
         return qs
 
 
-class ReportViewSet(viewsets.GenericViewSet):
-    
-    def get_queryset(self):
-        pass
+class ReportView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        s = (Row.objects.all()
+             # filters
+            .select_related("line")
+            .extra(select={'total':'core_line.price*core_line.quantity'})
+            .values("line__product_name", 'line__price', 'line__quantity','total')
+        )
+
+
+        

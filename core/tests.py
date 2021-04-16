@@ -1,8 +1,10 @@
 from test_plus.test import APITestCase as TestCase
 from django_seed import Seed
 from django.contrib.auth.models import User
+from django.db import models as m
 from .models import Line, Order
 from .serializers import LineSerializer, OrderSerializer
+from .models import Row
 
 FOOD_LIST = [
     'Cheese Pizza', 'Hamburger', 'Cheeseburger', 'Bacon Burger',
@@ -66,11 +68,10 @@ class TestFlow(InitMixin, TestCase):
             self.response_201()
 
     def test_aggregate(self):
-        from django.db import models as m
-        from .models import Row
-        s = (Row.objects.all().select_related("line")
+        s = (Row.objects.all()
+             # filters
+            .select_related("line")
             .extra(select={'total':'core_line.price*core_line.quantity'})
             .values("line__product_name", 'line__price', 'line__quantity','total')
         )
-        print(s.query)
-        assert False, s[0]
+        self.assertTrue('total' in s[0])
