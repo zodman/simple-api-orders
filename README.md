@@ -1,5 +1,9 @@
 ## List orders and products in 2.5 hrs
 
+
+[![Coverage
+Status](https://coveralls.io/repos/github/zodman/simple-api-orders/badge.svg?branch=main)](https://coveralls.io/github/zodman/simple-api-orders?branch=main)
+
 ## Install
 
 ```bash
