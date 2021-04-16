@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+# signals
+from .signals import create_auth_token 
 
 
 class Line(models.Model):
