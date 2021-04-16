@@ -1,5 +1,8 @@
 ## List orders and products in 2.5 hrs
 
+[![Django
+CI](https://github.com/zodman/simple-api-orders/actions/workflows/django.yml/badge.svg)](https://github.com/zodman/simple-api-orders/actions/workflows/django.yml)
+
 
 [![Coverage
 Status](https://coveralls.io/repos/github/zodman/simple-api-orders/badge.svg?branch=main)](https://coveralls.io/github/zodman/simple-api-orders?branch=main)
