@@ -1,0 +1,10 @@
+django
+djangorestframework
+django-filter
+django-test-plus
+fabric
+patchwork
+django-seed
+
+# test
+coverage
